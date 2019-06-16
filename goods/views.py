@@ -12,7 +12,7 @@ import json
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -23,7 +23,7 @@ class GoodsViewSet(viewsets.ModelViewSet):
     queryset = Goods.objects.all().order_by('-add_time')
     serializer_class = GoodsSerializer
     lookup_field = 'good_name'
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     @action(detail=True)

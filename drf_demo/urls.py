@@ -19,8 +19,9 @@ from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from goods.views import GoodsViewSet
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken import views
 
 # Serializers define the API representation.
 class UserSerializer(serializers.ModelSerializer):
@@ -33,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
 router = routers.DefaultRouter()
@@ -42,5 +43,6 @@ router.register(r'goods', GoodsViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^api-token-auth/', views.obtain_auth_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
